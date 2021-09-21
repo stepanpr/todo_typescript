@@ -1,0 +1,13 @@
+{
+  "name": "todo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dblite": "1.1.4",
+    "express": "4.17.1",
+    "nanoid": "3.1.25"
+  }
+}
