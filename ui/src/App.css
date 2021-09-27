@@ -1,0 +1,119 @@
+
+
+* {
+	margin: 0;
+	padding: 0; 
+	box-sizing: border-box;
+
+}
+
+.App {
+	border: 1px solid rgb(77, 211, 44);
+	/* width: 1000px; */
+	height: 100vh;
+}
+
+.container {
+	/* border: 1px solid red; */
+	width: 80%;
+	margin: 0 auto;
+	margin-top: 40px;
+	box-shadow: 2px 2px 3px 2px rgba(71, 69, 69, .4);
+	
+}
+
+.todoForm {
+	/* display: flex; */
+	/* margin-bottom: 20px; */
+	/* display: flex; */
+	/* max-width: 100%; */
+	/* width: 100%; */
+	/* justify-content: center; */
+	border: 1px solid rgb(230, 230, 230);
+
+}
+
+.todoForm_sendBox {
+	display: flex;
+	margin-bottom: 20px;
+	display: flex;
+	max-width: 100%;
+	width: 85%;
+	justify-content: center;
+	/* border: 1px solid rgb(37, 155, 57); */
+	margin:  40px auto;
+	/* margin-bottom: 20px; */
+
+}
+
+.todoForm input{
+	display: block;
+	width: 85%;
+	line-height: 40px;
+	font-size: 25px;
+	margin: 0 auto;
+	border-radius: 7px 0px 0px 7px;
+	border: 1px solid rgb(37, 155, 57);
+	box-shadow: 2px 2px 3px 0 rgb(68, 184, 113);
+
+}
+
+.todoForm label{
+	display: block;
+	width: 87%;
+	/* line-height: 30px; */
+	font-size: 10px;
+	margin: 0 auto;
+	/* border: 1px solid black; */
+}
+
+.todoForm button {
+	margin-bottom: 20px;
+	display: block;
+	width: 15%;
+	line-height: 30px;
+	background-color: rgb(68, 184, 113);
+	border-radius: 5px;
+	box-shadow: 2px 2px 3px 0 rgb(68, 184, 113);
+	border: 1px solid rgb(37, 155, 57);
+	margin: 0;
+	border-radius: 0 7px 7px 0;
+	width: 25%;
+	border-left: none;
+}
+
+
+
+.taskList {
+	/* border: 1px solid rgb(37, 155, 57); */
+	width: 90%;
+	margin: 0 auto;
+}
+
+.taskList__item {
+	display: block;
+	list-style-type: square;
+	line-height: 1.5em;
+	border-bottom: 1px solid rgb(218, 228, 211);
+	font-size: 1.2em;
+	cursor: pointer;
+}
+
+.taskList__item-checkbox {
+	/* border: 1px solid red; */
+}
+.taskList__item-title {
+	margin-left: 20px;
+}
+.taskList__item-datetime,
+.taskList__item-id  {
+	margin-left: 20px;
+	color:rgba(133, 151, 137, 0.9);
+	font-size: 0.8em;
+	font-style: italic;
+}
+
+.deleteButton {
+	color: red;
+	float: right;
+}
