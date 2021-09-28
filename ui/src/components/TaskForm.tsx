@@ -3,16 +3,15 @@ import classnames from 'classnames';
 import { IUpdating } from "../interfaces/IUpdating";
 
 
-interface TodoFormProps {
+interface TaskFormProps {
 	addTask(title: string): void;
 	updating: any;
 	deleteCompletedsTasks(): void;
 	setUpdating(updating: IUpdating): void;
+	sumOfCompleteds: number;
 }
 
-// export const FormTodo: React.FunctionComponent<{addTodo(title: string): void}> = (props) => {
- export const TodoForm: React.FunctionComponent<TodoFormProps> = (props) => {
-
+export const TaskForm: React.FunctionComponent<TaskFormProps> = (props) => {
 
 	const[ title, setTitle ] = useState<string>('');
 
@@ -25,7 +24,7 @@ interface TodoFormProps {
 		return () => {
 		  window.removeEventListener("keydown", handleEscPress);
 		};
-	  }, []);
+	  });
 
 	const hadleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setTitle(event.target.value)
@@ -54,6 +53,7 @@ interface TodoFormProps {
 	const handleClick = () => {
 		props.addTask(title);
 		setTitle('');
+		alert(props.sumOfCompleteds)
 	}
 
 	const buttonValue = props.updating.yes ? 'Применить изменения' : 'Добавить задачу';
@@ -73,6 +73,13 @@ interface TodoFormProps {
 		'todoForm_input-label-none': !props.updating.yes,
 	});
 
+	const deleteAllButtonClassNames = classnames({
+		'todoForm_buttonDeleteAll': true,
+		'todoForm_buttonDeleteAll-inactive': props.sumOfCompleteds <= 0,
+	})
+
+	
+
 	return (
 		<div className="todoForm">
 			<label className={classnames(labelClassNames)} htmlFor="title">Отредактируйте задачу или нажмите ESC для отмены...</label>
@@ -81,11 +88,9 @@ interface TodoFormProps {
 				<button className={buttonClassNames} onClick={handleClick}>{buttonValue}</button>
 			</div>
 			<div className="todoForm_actionBox">
-				<button className='todoForm_buttonDeleteAll' onClick={props.deleteCompletedsTasks}>Удалить завершенные</button>
+				<button className={classnames(deleteAllButtonClassNames)} onClick={props.deleteCompletedsTasks}>Удалить завершенные</button>
 			</div>
 
 		</div>
 	);
 }
-
-// export default FormTodo;

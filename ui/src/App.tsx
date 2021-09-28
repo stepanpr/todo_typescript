@@ -1,6 +1,6 @@
 import React, {  useState, useReducer, useEffect } from 'react';
-import { TodoForm } from './components/TodoForm';
-import { TodoList } from './components/TodoList';
+import { TaskForm } from './components/TaskForm';
+import { TaskList } from './components/TaskList';
 import './App.css';
 import axios from 'axios';
 import { ITask } from './interfaces/ITask'
@@ -12,40 +12,45 @@ import { IUpdating } from './interfaces/IUpdating'
 
 function initialTasks() {
 	return([
-		{ id: '000', title: 'empty', completed: false, datetime: null},
+		// { id: '000', title: 'empty', completed: false, datetime: null},
 		// { id: '1', title: 'todo2', completed: false, datetime: 222},
-	])
+	]);
 }
 
+enum ActionTypes {
+	copyTasks = 'copyTasks',
+	deleteCompleteds = 'deleteCompleteds'
+}
 
-
-function reducerTasks(state: any, action: any) {
+function reducerTasks(state: ITask[], action: any ) {
 	switch (action.type) {
-		case 'addTask': {
-			const { title } = action.payload;
-			console.log('addTodo state:', state);
-			console.log('addTodo:', title);
-			return [
-				...state, 
-				{
-					id: 2,
-					title: title,
-					completed: false,
-					datetime: 64
-				}
-			];
-		}
-		case 'copyTasks': {
+		// case 'addTask': {
+		// 	const { title } = action.payload; 
+		// 	console.log('addTodo state:', state);
+		// 	console.log('addTodo:', title);
+		// 	return [
+		// 		...state, 
+		// 		{
+		// 			id: 2,
+		// 			title: title,
+		// 			completed: false,
+		// 			datetime: 64
+		// 		}
+		// 	];
+		// }
+		
+		case ActionTypes.copyTasks: {
+			
 			const tasks  = action.tasks;
 			// let newTasks = tasks.slice();
-			const newTasks = tasks.map((a : any) => ({...a}));
+			const newTasks = tasks.map((a : ITask) => ({...a}));
 			// console.log();
 
 			return newTasks;
 		}
-		case 'deleteCompleteds': {
+		case ActionTypes.deleteCompleteds: {
 			const deleteTask = action.deleteTask;
-			const newTasks = state.map((task: any) => {
+			const newTasks = state.map((task: ITask) => {
 				// console.log('4444', task.completed);
 				if (task.completed === true)
 					deleteTask(task.id);
@@ -107,7 +112,7 @@ const App: React.FunctionComponent = () => {
 		// console.log(data);
 		// setTasks(data.items);
 		// dispatchTodos({type: 'copyTasks', payload: data.items});
-		fetch(getURL)
+		await fetch(getURL)
 		.then(result => result.json())
 		.then((data) => dispatchTasks({type: 'copyTasks', tasks: data.items}));
     }
@@ -163,10 +168,16 @@ const App: React.FunctionComponent = () => {
 
 	}
 
+
+
 	/* удаление завершенных tasks */
 	const deleteCompletedsTasks = () => {
 
-		dispatchTasks({type: 'deleteCompleteds', deleteTask: deleteTask });
+		if (countElements(true) > 0 && window.confirm('Вы уверены?')) {
+			dispatchTasks({type: 'deleteCompleteds', deleteTask: deleteTask });
+			getTasks();
+		}
+
 		// axios({
 		// 	method: 'delete',
 		// 	url: deleteURL,
@@ -234,7 +245,11 @@ const App: React.FunctionComponent = () => {
 			setUpdating({yes: false, value: ''});
 			setSelectedElement(initSelectedElement);
 			// alert(updating.yes);
+			getTasks();
+
 		} else if (task.id === selectedElement.id && updating.yes === true) {
+			getTasks();
+
 			return ;
 		} else {
 			// alert(updating.yes);
@@ -250,7 +265,7 @@ const App: React.FunctionComponent = () => {
 			// 		datetime: task.datetime
 			// 	}
 			// });
-			// getTasks();
+			getTasks();
 			setUpdating( {yes: true, value: ''});
 			setSelectedElement(task);
 		}
@@ -280,6 +295,11 @@ const App: React.FunctionComponent = () => {
 
 	}
 
+	/* подсчет элементов: true === выполенные, false === невыполенные */
+	const countElements = (request: boolean) => {
+		return tasks.reduce((sum: number, elem: ITask) => (elem.completed === request) ? sum+1 : sum, 0);
+	}
+
 	// const resetUpdating = () => {
 	// 	setUpdating({yes: false, value: ''});
 	// }
@@ -289,7 +309,7 @@ const App: React.FunctionComponent = () => {
 		<div className="App">
 
 			<div className="container">
-				<TodoList 
+				<TaskList 
 					tasks={tasks} 
 					deleteTask={deleteTask} 
 					updating={updating} 
@@ -299,10 +319,11 @@ const App: React.FunctionComponent = () => {
 					
 				/> 
 
-				<TodoForm addTask={addTask} 
+				<TaskForm addTask={addTask} 
 					updating={updating} 
-					setUpdating={setUpdating} 
+					setUpdating={setUpdating}
 					deleteCompletedsTasks={deleteCompletedsTasks}
+					sumOfCompleteds={countElements(true)}
 				/>
 			</div>
 

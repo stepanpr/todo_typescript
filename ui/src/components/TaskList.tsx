@@ -27,7 +27,7 @@ import classnames from 'classnames';
 // 	);
 // }
 
-interface TasksProps{
+interface TaskListProps{
 
 	tasks: ITask[];
 	deleteTask(id: string): void;
@@ -37,7 +37,7 @@ interface TasksProps{
 	selectedElement: ITask;
 }
 
-export const TodoList: React.FunctionComponent<TasksProps> = (props) => {
+export const TaskList: React.FunctionComponent<TaskListProps> = (props) => {
 
 	const handleDelete = (id: string) => {
 		if (props.updating.yes)
@@ -63,13 +63,13 @@ export const TodoList: React.FunctionComponent<TasksProps> = (props) => {
 			
       {Array.isArray(props.tasks) && props.tasks.map((task) => {
 
-			const editSpanBtnValue = props.updating.yes && props.selectedElement.id === task.id ? 'отмена' : 'ред.' 
+			const editButtonValue = props.updating.yes && props.selectedElement.id === task.id ? 'отмена' : 'ред.' 
 		  	const completedClassNames = classnames({
 				'taskList__item': true,
 				'item-completed': task.completed === true,
 				// 'item-updating': props.updating.yes && (idOfUpdating !== task.id ),
 			});
-			const updatingClassNames = classnames({
+			const titleClassNames = classnames({
 				'taskList__item-title': true,
 				'item-title-updating': props.updating.yes,
 				'item-titte-selected': props.updating.yes && (props.selectedElement.id === task.id )
@@ -77,19 +77,24 @@ export const TodoList: React.FunctionComponent<TasksProps> = (props) => {
 			const editButtonClassNames = classnames({
 				'editButton': !task.completed,
 				'editButton-none': task.completed,
+				'editButton-updating': props.updating.yes && (props.selectedElement.id !== task.id )
+			});
+			const deleteButtonClassNames = classnames({
+				'deleteButton': true,
+				'deleteButton-updating': props.updating.yes
 			});
 			console.log('dd', task.completed)
 			console.log('sd', props.selectedElement.id);
         	return (
 				<li className={classnames(completedClassNames)} key={task.id}>
 					<input className='taskList__item-checkbox' type="checkbox" onChange={() => props.checkAsComplete(task)} checked={task.completed}/>
-					<span className={updatingClassNames}>{task.title}</span>
+					<span className={titleClassNames}>{task.title}</span>
 					<span className='taskList__item-datetime'>(time: {task.datetime}, </span>
 					<span className='taskList__item-id'>id: {task.id})</span>
 					{/* <span className='taskList__item-id'>com:{task.completed}</span> */}
 
-					<span className='deleteButton' onClick={() => handleDelete(task.id)}>del</span>
-					<span className={classnames(editButtonClassNames)} onClick={() => handleEdit(task)}>{editSpanBtnValue}</span>
+					<span className={classnames(deleteButtonClassNames)} onClick={() => handleDelete(task.id)}>удал.</span>
+					<span className={classnames(editButtonClassNames)} onClick={() => handleEdit(task)}>{editButtonValue}</span>
 
 				</li>
         );

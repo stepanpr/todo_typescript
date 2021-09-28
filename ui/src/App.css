@@ -4,7 +4,6 @@
 	margin: 0;
 	padding: 0; 
 	box-sizing: border-box;
-
 }
 
 .App {
@@ -16,7 +15,7 @@
 .container {
 	/* border: 1px solid red; */
 	width: 80%;
-	min-width: 700px;
+	min-width: 750px;
 	margin: 0 auto;
 	margin-top: 40px;
 	box-shadow: 2px 2px 3px 2px rgba(71, 69, 69, .4);
@@ -26,6 +25,7 @@
 .todoForm {
 	display: flex;
 	flex-direction: column;
+	min-width: 600px;
 	/* margin-bottom: 20px; */
 	/* display: flex; */
 	/* max-width: 100%; */
@@ -119,14 +119,19 @@
 	/* margin: 40px auto; */
 	border-radius: 7px;
 	/* width: 25%; */
+}
+.todoForm_buttonDeleteAll-inactive {
+	background-color: rgba(148, 148, 148, .4);
+	border: 1px solid rgba(148, 148, 148, .7);
+	color: rgba(148, 148, 148, .7);
 
 }
-
 
 
 .taskList {
 	/* border: 1px solid rgb(37, 155, 57); */
 	width: 90%;
+	min-width: 650px;
 	margin: 0 auto;
 }
 
@@ -174,6 +179,11 @@
 	margin-left: 20px;
 	color: rgb(218, 133, 53);
 	float: right;
+}
+
+.deleteButton-updating,
+.editButton-updating {
+	color: rgba(148, 148, 148, .9);
 }
 
 .editButton-none {
