@@ -10,8 +10,8 @@ import { ITask } from './interfaces/ITask'
 
 function initialTasks() {
 	return([
-		{ id: '0', title: 'todo1', completed: false, datetime: 222},
-		{ id: '1', title: 'todo2', completed: false, datetime: 222},
+		{ id: '000', title: 'empty', completed: false, datetime: null},
+		// { id: '1', title: 'todo2', completed: false, datetime: 222},
 	])
 }
 
@@ -41,6 +41,19 @@ function reducerTasks(state: any, action: any) {
 
 			return newTasks;
 		}
+		case 'setCompleted': {
+			const id = action.id;
+		alert(id);
+
+			let newTasks = state.map((task: ITask) => {
+				// alert(task.completed)
+				if (task.id === id) {
+					task.completed = !task.completed;
+				}
+				return task;
+			});
+			return newTasks;
+		}
 		default: 
 			return state;
 	}
@@ -54,6 +67,8 @@ const App: React.FunctionComponent = () => {
 	let tasksList: any = [];
 	// const [tasks, setTodos] = useState([]);
 	const [tasks, dispatchTasks] = useReducer(reducerTasks, tasksList, initialTasks);
+
+	const [completeds, setCompleteds] = useState([]);
 
 	// const [todos, setTodos] = useState([]);
 	// const [state, setState] = useState({error: null, isLoaded: false, items: []})
@@ -70,7 +85,7 @@ const App: React.FunctionComponent = () => {
 	}, [dispatchTasks]);
 
 
-	/* загрузка tasks */
+	/* загрузка tasks из БД в стейт*/
 	const getTasks = async () => {
 		// const {data} = await axios.get(getURL);
 		// console.log(data);
@@ -81,6 +96,7 @@ const App: React.FunctionComponent = () => {
 		.then((data) => dispatchTasks({type: 'copyTasks', tasks: data.items}));
     }
 
+	/* отправка tasks */
 	const postTask = (title: string) => {
 
 		axios({
@@ -93,6 +109,8 @@ const App: React.FunctionComponent = () => {
 				datetime: null
 			}
 		  });
+		getTasks();
+
 		// axios.post(postURL, {                      	/////////!!!!
 		// 	id: '3333',
 		// 	title: 'Freelance Developer',
@@ -114,6 +132,7 @@ const App: React.FunctionComponent = () => {
 		// //   alert(result.message);
     }
 
+	/* удаление tasks */
 	const deleteTask = (id: string) => {
 		axios({
 			method: 'delete',
@@ -126,6 +145,7 @@ const App: React.FunctionComponent = () => {
 
 	}
 
+	/* удаление завершенных tasks */
 	const deleteCompletedTasks = () => {
 		axios({
 			method: 'delete',
@@ -155,55 +175,56 @@ const App: React.FunctionComponent = () => {
 	// 		completed: true
 	// 	});
 		getTasks();
-		deleteTask('-RDbvAYy95BG5gufPvL-T')
+		// deleteTask('-RDbvAYy95BG5gufPvL-T')
 		// deleteCompletedTasks();
 
 
 
-		// axios({
-		// 	method: 'delete',
-		// 	url: deleteURL,
-		// 	// data: "vyBb2MbMyPdvoIVWPcxRQ, NshW1AVLsCLekRSSxZgre, KjlYUYqibfk3XNim-2-pU"
-
-		// 	// data: ['vyBb2MbMyPdvoIVWPcxRQ', 'NshW1AVLsCLekRSSxZgre', 'KjlYUYqibfk3XNim-2-pU']
-		// 	// data: JSON.stringify(['vyBb2MbMyPdvoIVWPcxRQ', 'NshW1AVLsCLekRSSxZgre', 'KjlYUYqibfk3XNim-2-pU'])
-		//   });
-		// alert(title);
-		getTasks();
-
-		// tasks.map(task => console.log('sss', task));
-		// console.log(tasks);
-		// dispatchTodos({type: 'addTodo', payload: { title }});
-
-
-		// console.log('addTodo:', title);
-		// let { todos } = await axios.post('/tasks/create');
-		// axios.post('http://localhost:3000/tasks/getList', { id: 'fff', title: 'todo1', completed: false, datetime: 222})
-		//   .then(function (response) {
-		// 	console.log(response);
-		//   })
-		//   .catch(function (error) {
-		// 	console.log(error);
-		//   });
-
-
-		// 	axios.get(apiUrl).then((resp) => {
-		// const allPersons = resp.data;
-		// // setAppState(allPersons);
-		// console.log('addTodo1111', allPersons);
-
-		// dispatchTodos({type: 'addTodo', payload: { title }});
-	//   });
 	}
 
 		// console.log('todos' + todos);
+
+	const updateTask = (task: ITask) => {
+		deleteTask(task.id);
+		axios({
+			method: 'post',
+			url: postURL,
+			data: {
+				id: task.id,
+				title: task.title,
+				completed: !task.completed,
+				datetime: task.datetime
+			}
+		  });
+		getTasks();
+	}
+
+	const checkAsComplete = (task: ITask) => {
+		// dispatchTasks({type: 'setCompleted', id: id})
+		// alert(id);
+		deleteTask(task.id);
+		axios({
+			method: 'post',
+			url: postURL,
+			data: {
+				id: task.id,
+				title: task.title,
+				completed: !task.completed,
+				datetime: task.datetime
+			}
+		  });
+		getTasks();
+		// updateTask(task);
+		// getTasks();
+
+	} 
 
 	
 	return (
 		<div className="App">
 
 			<div className="container">
-				<TodoList tasks={tasks} deleteTask={deleteTask}/> 
+				<TodoList tasks={tasks} deleteTask={deleteTask} updateTask={updateTask} checkAsComplete={checkAsComplete}/> 
 
 				<TodoForm addTask={addTask}/>
 			</div>

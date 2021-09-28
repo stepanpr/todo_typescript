@@ -99,6 +99,11 @@
 	cursor: pointer;
 }
 
+.item-completed {
+	text-decoration: line-through;
+	background-color: rgb(239, 248, 237);
+}
+
 .taskList__item-checkbox {
 	/* border: 1px solid red; */
 }
@@ -113,7 +118,9 @@
 	font-style: italic;
 }
 
-.deleteButton {
+.deleteButton,
+.editButton {
+	margin-left: 20px;
 	color: red;
 	float: right;
 }

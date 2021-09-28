@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import classnames from 'classnames';
+
 
 interface TodoFormProps {
 	addTask(title: string): void;
@@ -15,24 +17,28 @@ interface TodoFormProps {
 	}
 
 	const handleEnter = (event: React.KeyboardEvent) => {
-		if(event.key === 'Enter')
+		if(event.key === 'Enter') {
 			props.addTask(title);
+			setTitle('');
+		}
 			// console.log(title);
 			// addNew();
 	}
 
 	const handleClick = () => {
 		props.addTask(title);
+		setTitle('');
 	}
 
+
 	return (
-		<div className="todoForm">
+		<ul className="todoForm">
 			{/* <label htmlFor="title">Новая зачача: </label> */}
 			<div className="todoForm_sendBox">
 				<input onChange={hadleChange} onKeyPress={handleEnter} type="text" id="title" autoFocus={true} value={title} placeholder="Введите новую задачу" ref={input => input && input.focus()}/>
 				<button onClick={handleClick}>Добавить</button>
 			</div>
-		</div>
+		</ul>
 	);
 }
 
