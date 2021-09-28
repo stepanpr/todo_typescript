@@ -4,6 +4,7 @@ import { TodoList } from './components/TodoList';
 import './App.css';
 import axios from 'axios';
 import { ITask } from './interfaces/ITask'
+import { timeLog } from 'console';
 
 // curl -d '{"id":"value1", "title":"value2", "completed":"true"}' -H "Content-Type: application/json" -X POST http://localhost:3000/tasks/create
 
@@ -41,19 +42,19 @@ function reducerTasks(state: any, action: any) {
 
 			return newTasks;
 		}
-		case 'setCompleted': {
-			const id = action.id;
-		alert(id);
+		// case 'setCompleted': {
+		// 	const id = action.id;
+		// alert(id);
 
-			let newTasks = state.map((task: ITask) => {
-				// alert(task.completed)
-				if (task.id === id) {
-					task.completed = !task.completed;
-				}
-				return task;
-			});
-			return newTasks;
-		}
+		// 	let newTasks = state.map((task: ITask) => {
+		// 		// alert(task.completed)
+		// 		if (task.id === id) {
+		// 			task.completed = !task.completed;
+		// 		}
+		// 		return task;
+		// 	});
+		// 	return newTasks;
+		// }
 		default: 
 			return state;
 	}
@@ -64,9 +65,12 @@ function reducerTasks(state: any, action: any) {
 const App: React.FunctionComponent = () => {
 
 
-	let tasksList: any = [];
+	let tasksList: ITask[] = [];
 	// const [tasks, setTodos] = useState([]);
 	const [tasks, dispatchTasks] = useReducer(reducerTasks, tasksList, initialTasks);
+	const [updating, setUpdating] = useState({ yes: false, value: '', })
+	const initSelectedElement = {id: 'null', title: 'null', completed: false, datetime: 'null' };
+	const [selectedElement, setSelectedElement] = useState<ITask>(initSelectedElement);
 
 	const [completeds, setCompleteds] = useState([]);
 
@@ -99,6 +103,8 @@ const App: React.FunctionComponent = () => {
 	/* отправка tasks */
 	const postTask = (title: string) => {
 
+		if (title === '') //alert
+			return ;
 		axios({
 			method: 'post',
 			url: postURL,
@@ -164,6 +170,34 @@ const App: React.FunctionComponent = () => {
 
 	const addTask = async (title: string) => {
 
+		if (title === "")
+		{
+			// setStatus({show: true, value: "Field is empty...", error: true});
+			return ;
+		}
+		if (updating.yes === true) {
+			// alert(title);
+			// alert(selectedElement.title)
+
+			deleteTask(selectedElement.id);
+			axios({
+				method: 'post',
+				url: postURL,
+				data: {
+					id: selectedElement.id,
+					title: title,
+					completed: selectedElement.completed,
+					datetime: selectedElement.datetime
+				}
+			});
+			getTasks();
+
+
+			setUpdating( {yes: false, value: ''});
+			setSelectedElement(initSelectedElement);
+			return ;
+		}
+
 		postTask(title);
 
 	// fetch(getURL)
@@ -177,29 +211,39 @@ const App: React.FunctionComponent = () => {
 		getTasks();
 		// deleteTask('-RDbvAYy95BG5gufPvL-T')
 		// deleteCompletedTasks();
-
-
-
 	}
 
 		// console.log('todos' + todos);
 
 	const updateTask = (task: ITask) => {
-		deleteTask(task.id);
-		axios({
-			method: 'post',
-			url: postURL,
-			data: {
-				id: task.id,
-				title: task.title,
-				completed: !task.completed,
-				datetime: task.datetime
-			}
-		  });
-		getTasks();
+
+		if (updating.yes === true) {
+			setUpdating( {yes: false, value: ''});
+			setSelectedElement(initSelectedElement);
+			// alert(updating.yes);
+		} else {
+			// alert(updating.yes);
+
+			// deleteTask(task.id);
+			// axios({
+			// 	method: 'post',
+			// 	url: postURL,
+			// 	data: {
+			// 		id: task.id,
+			// 		title: task.title,
+			// 		completed: task.completed,
+			// 		datetime: task.datetime
+			// 	}
+			// });
+			// getTasks();
+			setUpdating( {yes: true, value: ''});
+			setSelectedElement(task);
+		}
 	}
 
 	const checkAsComplete = (task: ITask) => {
+		if (!updating.yes) {
+
 		// dispatchTasks({type: 'setCompleted', id: id})
 		// alert(id);
 		deleteTask(task.id);
@@ -216,6 +260,8 @@ const App: React.FunctionComponent = () => {
 		getTasks();
 		// updateTask(task);
 		// getTasks();
+		}
+
 
 	} 
 
@@ -224,9 +270,9 @@ const App: React.FunctionComponent = () => {
 		<div className="App">
 
 			<div className="container">
-				<TodoList tasks={tasks} deleteTask={deleteTask} updateTask={updateTask} checkAsComplete={checkAsComplete}/> 
+				<TodoList tasks={tasks} deleteTask={deleteTask} updating={updating} updateTask={updateTask} checkAsComplete={checkAsComplete}/> 
 
-				<TodoForm addTask={addTask}/>
+				<TodoForm addTask={addTask} updating={updating}/>
 			</div>
 
 		</div>

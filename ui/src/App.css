@@ -46,7 +46,7 @@
 
 }
 
-.todoForm input{
+.todoForm_input {
 	display: block;
 	width: 85%;
 	line-height: 40px;
@@ -58,6 +58,10 @@
 
 }
 
+.input-updating {
+	box-shadow: 2px 2px 6px 0 rgb(165, 130, 33);
+}
+
 .todoForm label{
 	display: block;
 	width: 87%;
@@ -67,7 +71,7 @@
 	/* border: 1px solid black; */
 }
 
-.todoForm button {
+.todoForm_buttonAdd {
 	margin-bottom: 20px;
 	display: block;
 	width: 15%;
@@ -80,6 +84,10 @@
 	border-radius: 0 7px 7px 0;
 	width: 25%;
 	border-left: none;
+}
+
+.buttonAdd-updating {
+	box-shadow: 2px 2px 6px 0 rgb(165, 130, 33);
 }
 
 
@@ -102,6 +110,11 @@
 .item-completed {
 	text-decoration: line-through;
 	background-color: rgb(239, 248, 237);
+}
+
+.item-updating {
+	/* box-shadow: 2px 2px 6px 0 rgb(165, 130, 33); */
+	color: gray;
 }
 
 .taskList__item-checkbox {

@@ -4,6 +4,7 @@ import classnames from 'classnames';
 
 interface TodoFormProps {
 	addTask(title: string): void;
+	updating: any;
 }
 
 // export const FormTodo: React.FunctionComponent<{addTodo(title: string): void}> = (props) => {
@@ -30,13 +31,24 @@ interface TodoFormProps {
 		setTitle('');
 	}
 
+	const buttonValue = props.updating.yes ? 'Edit value' : 'Add New';
+
+	const inputClassNames = classnames({
+		'todoForm_input': true,
+		'input-updating': props.updating.yes,
+	});
+	
+	const buttonClassNames = classnames({
+		'todoForm_buttonAdd': true,
+		'buttonAdd-updating': props.updating.yes,
+	});
 
 	return (
 		<ul className="todoForm">
 			{/* <label htmlFor="title">Новая зачача: </label> */}
 			<div className="todoForm_sendBox">
-				<input onChange={hadleChange} onKeyPress={handleEnter} type="text" id="title" autoFocus={true} value={title} placeholder="Введите новую задачу" ref={input => input && input.focus()}/>
-				<button onClick={handleClick}>Добавить</button>
+				<input className={inputClassNames} onChange={hadleChange} onKeyPress={handleEnter} type="text" id="title" autoFocus={true} value={title} placeholder="Введите новую задачу" ref={input => input && input.focus()}/>
+				<button className={buttonClassNames} onClick={handleClick}>{buttonValue}</button>
 			</div>
 		</ul>
 	);
