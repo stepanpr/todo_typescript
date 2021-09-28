@@ -40,14 +40,18 @@ interface TasksProps{
 export const TodoList: React.FunctionComponent<TasksProps> = (props) => {
 
 	const handleDelete = (id: string) => {
+		if (props.updating.yes)
+			return ;
 		props.deleteTask(id);
 	}
 
 	// let idOfUpdating: string;
 	const handleEdit = (task: ITask) => {
+		if (props.updating.yes && task.id !== props.selectedElement.id)
+			return ;
 		props.updateTask(task);
 		// idOfUpdating = task.id;
-		alert(task.id);
+		// alert(task.id);
 		// return task.id;
 	}
 
@@ -58,6 +62,8 @@ export const TodoList: React.FunctionComponent<TasksProps> = (props) => {
 		<ul className="taskList">
 			
       {Array.isArray(props.tasks) && props.tasks.map((task) => {
+
+			const editSpanBtnValue = props.updating.yes && props.selectedElement.id === task.id ? 'отмена' : 'ред.' 
 		  	const completedClassNames = classnames({
 				'taskList__item': true,
 				'item-completed': task.completed === true,
@@ -66,7 +72,7 @@ export const TodoList: React.FunctionComponent<TasksProps> = (props) => {
 			const updatingClassNames = classnames({
 				'taskList__item-title': true,
 				'item-title-updating': props.updating.yes,
-				'item-tilte-selected': props.updating.yes && (props.selectedElement.id === task.id )
+				'item-titte-selected': props.updating.yes && (props.selectedElement.id === task.id )
 			});
 			const editButtonClassNames = classnames({
 				'editButton': !task.completed,
@@ -83,7 +89,7 @@ export const TodoList: React.FunctionComponent<TasksProps> = (props) => {
 					{/* <span className='taskList__item-id'>com:{task.completed}</span> */}
 
 					<span className='deleteButton' onClick={() => handleDelete(task.id)}>del</span>
-					<span className={classnames(editButtonClassNames)} onClick={() => handleEdit(task)}>edit</span>
+					<span className={classnames(editButtonClassNames)} onClick={() => handleEdit(task)}>{editSpanBtnValue}</span>
 
 				</li>
         );

@@ -45,7 +45,7 @@
 	justify-content: center;
 	/* border: 1px solid rgb(37, 155, 57); */
 	margin:  0 auto;
-	margin-top: 40px;
+	/* margin-top: 40px; */
 }
 
 .todoForm_actionBox {
@@ -73,13 +73,20 @@
 	box-shadow: 2px 2px 6px 0 rgb(165, 130, 33);
 }
 
-.todoForm label{
+.todoForm_input-label {
 	display: block;
-	width: 87%;
-	/* line-height: 30px; */
-	font-size: 10px;
+	width: 85%;
+	line-height: 14px;
+	font-size: 11px;
 	margin: 0 auto;
+	color: rgb(218, 133, 53);
 	/* border: 1px solid black; */
+	margin-top: 40px;
+	/* opacity: .0; */
+}
+
+.todoForm_input-label-none {
+	visibility: hidden;
 }
 
 .todoForm_buttonAdd {
@@ -126,7 +133,7 @@
 .taskList__item {
 	display: block;
 	list-style-type: square;
-	line-height: 1.6em;
+	line-height: 2em;
 	border-bottom: 1px solid rgb(218, 228, 211);
 	font-size: 1.2em;
 	cursor: pointer;
@@ -135,6 +142,7 @@
 .item-completed {
 	text-decoration: line-through;
 	background-color: rgb(239, 248, 237);
+	color: rgb(88, 173, 88);
 }
 
 .item-title-updating {
@@ -142,7 +150,7 @@
 	color: rgba(148, 148, 148, .9);
 }
 
-.item-tilte-selected {
+.item-titte-selected {
 	color: rgba(216, 156, 44, 0.9);
 	/* font-size: 1.3em; */
 }
@@ -164,7 +172,7 @@
 .deleteButton,
 .editButton {
 	margin-left: 20px;
-	color: red;
+	color: rgb(218, 133, 53);
 	float: right;
 }
 

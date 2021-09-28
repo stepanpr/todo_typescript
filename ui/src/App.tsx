@@ -4,6 +4,7 @@ import { TodoList } from './components/TodoList';
 import './App.css';
 import axios from 'axios';
 import { ITask } from './interfaces/ITask'
+import { IUpdating } from './interfaces/IUpdating'
 
 
 // curl -d '{"id":"value1", "title":"value2", "completed":"true"}' -H "Content-Type: application/json" -X POST http://localhost:3000/tasks/create
@@ -78,7 +79,7 @@ const App: React.FunctionComponent = () => {
 	let tasksList: ITask[] = [];
 	// const [tasks, setTodos] = useState([]);
 	const [tasks, dispatchTasks] = useReducer(reducerTasks, tasksList, initialTasks);
-	const [updating, setUpdating] = useState({ yes: false, value: '', })
+	const [updating, setUpdating] = useState<IUpdating>({ yes: false, value: '', })
 	const initSelectedElement = {id: 'null', title: 'null', completed: false, datetime: 'null' };
 	const [selectedElement, setSelectedElement] = useState<ITask>(initSelectedElement);
 
@@ -229,10 +230,12 @@ const App: React.FunctionComponent = () => {
 
 	const updateTask = (task: ITask) => {
 
-		if (updating.yes === true) {
-			setUpdating( {yes: false, value: ''});
+		if (task.id === selectedElement.id && updating.yes === true) {
+			setUpdating({yes: false, value: ''});
 			setSelectedElement(initSelectedElement);
 			// alert(updating.yes);
+		} else if (task.id === selectedElement.id && updating.yes === true) {
+			return ;
 		} else {
 			// alert(updating.yes);
 
@@ -275,16 +278,32 @@ const App: React.FunctionComponent = () => {
 
 		getTasks();
 
-	} 
+	}
+
+	// const resetUpdating = () => {
+	// 	setUpdating({yes: false, value: ''});
+	// }
 
 	
 	return (
 		<div className="App">
 
 			<div className="container">
-				<TodoList tasks={tasks} deleteTask={deleteTask} updating={updating} updateTask={updateTask} selectedElement={selectedElement} checkAsComplete={checkAsComplete}/> 
+				<TodoList 
+					tasks={tasks} 
+					deleteTask={deleteTask} 
+					updating={updating} 
+					updateTask={updateTask} 
+					selectedElement={selectedElement} 
+					checkAsComplete={checkAsComplete}
+					
+				/> 
 
-				<TodoForm addTask={addTask} updating={updating} deleteCompletedsTasks={deleteCompletedsTasks}/>
+				<TodoForm addTask={addTask} 
+					updating={updating} 
+					setUpdating={setUpdating} 
+					deleteCompletedsTasks={deleteCompletedsTasks}
+				/>
 			</div>
 
 		</div>
