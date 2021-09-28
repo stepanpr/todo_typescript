@@ -4,7 +4,7 @@ import { TodoList } from './components/TodoList';
 import './App.css';
 import axios from 'axios';
 import { ITask } from './interfaces/ITask'
-import { timeLog } from 'console';
+
 
 // curl -d '{"id":"value1", "title":"value2", "completed":"true"}' -H "Content-Type: application/json" -X POST http://localhost:3000/tasks/create
 
@@ -42,6 +42,16 @@ function reducerTasks(state: any, action: any) {
 
 			return newTasks;
 		}
+		case 'deleteCompleteds': {
+			const deleteTask = action.deleteTask;
+			const newTasks = state.map((task: any) => {
+				// console.log('4444', task.completed);
+				if (task.completed === true)
+					deleteTask(task.id);
+				return task;
+			})
+			return newTasks;
+		}
 		// case 'setCompleted': {
 		// 	const id = action.id;
 		// alert(id);
@@ -72,14 +82,15 @@ const App: React.FunctionComponent = () => {
 	const initSelectedElement = {id: 'null', title: 'null', completed: false, datetime: 'null' };
 	const [selectedElement, setSelectedElement] = useState<ITask>(initSelectedElement);
 
-	const [completeds, setCompleteds] = useState([]);
+	// const [completeds, setCompleteds] = useState([]);
 
 	// const [todos, setTodos] = useState([]);
 	// const [state, setState] = useState({error: null, isLoaded: false, items: []})
 	// const apiURL='http://localhost:3000/tasks/getList?id=a2JPHbI_7JaVlUcrMepDJ';
 	const getURL='http://localhost:3000/tasks/getList';
 	const postURL='http://localhost:3000/tasks/create';
-	const deleteURL='http://localhost:3000/tasks/delete';
+	const deleteURL='http://localhost:3000/tasks/delete'; 
+	const updateURL='http://localhost:3000/tasks/update';
 
 	useEffect( () => {
 		fetch(getURL)
@@ -152,17 +163,16 @@ const App: React.FunctionComponent = () => {
 	}
 
 	/* удаление завершенных tasks */
-	const deleteCompletedTasks = () => {
-		axios({
-			method: 'delete',
-			url: deleteURL,
-			// data: "vyBb2MbMyPdvoIVWPcxRQ, NshW1AVLsCLekRSSxZgre, KjlYUYqibfk3XNim-2-pU"
+	const deleteCompletedsTasks = () => {
 
-			data: ['vyBb2MbMyPdvoIVWPcxRQ', 'NshW1AVLsCLekRSSxZgre', 'KjlYUYqibfk3XNim-2-pU']
-			// data: JSON.stringify(['vyBb2MbMyPdvoIVWPcxRQ', 'NshW1AVLsCLekRSSxZgre', 'KjlYUYqibfk3XNim-2-pU'])
-
-			
-		  });
+		dispatchTasks({type: 'deleteCompleteds', deleteTask: deleteTask });
+		// axios({
+		// 	method: 'delete',
+		// 	url: deleteURL,
+		// 	// data: "vyBb2MbMyPdvoIVWPcxRQ, NshW1AVLsCLekRSSxZgre, KjlYUYqibfk3XNim-2-pU"
+		// 	data: ['vyBb2MbMyPdvoIVWPcxRQ', 'NshW1AVLsCLekRSSxZgre', 'KjlYUYqibfk3XNim-2-pU']
+		// 	// data: JSON.stringify(['vyBb2MbMyPdvoIVWPcxRQ', 'NshW1AVLsCLekRSSxZgre', 'KjlYUYqibfk3XNim-2-pU'])
+		//   });
 	}
 	
 
@@ -179,10 +189,10 @@ const App: React.FunctionComponent = () => {
 			// alert(title);
 			// alert(selectedElement.title)
 
-			deleteTask(selectedElement.id);
+			// deleteTask(selectedElement.id);
 			axios({
 				method: 'post',
-				url: postURL,
+				url: updateURL,
 				data: {
 					id: selectedElement.id,
 					title: title,
@@ -190,11 +200,13 @@ const App: React.FunctionComponent = () => {
 					datetime: selectedElement.datetime
 				}
 			});
-			getTasks();
+			// getTasks();
 
 
 			setUpdating( {yes: false, value: ''});
 			setSelectedElement(initSelectedElement);
+			getTasks();
+
 			return ;
 		}
 
@@ -246,10 +258,10 @@ const App: React.FunctionComponent = () => {
 
 		// dispatchTasks({type: 'setCompleted', id: id})
 		// alert(id);
-		deleteTask(task.id);
+		// deleteTask(task.id);
 		axios({
 			method: 'post',
-			url: postURL,
+			url: updateURL,
 			data: {
 				id: task.id,
 				title: task.title,
@@ -257,11 +269,11 @@ const App: React.FunctionComponent = () => {
 				datetime: task.datetime
 			}
 		  });
-		getTasks();
 		// updateTask(task);
 		// getTasks();
 		}
 
+		getTasks();
 
 	} 
 
@@ -270,9 +282,9 @@ const App: React.FunctionComponent = () => {
 		<div className="App">
 
 			<div className="container">
-				<TodoList tasks={tasks} deleteTask={deleteTask} updating={updating} updateTask={updateTask} checkAsComplete={checkAsComplete}/> 
+				<TodoList tasks={tasks} deleteTask={deleteTask} updating={updating} updateTask={updateTask} selectedElement={selectedElement} checkAsComplete={checkAsComplete}/> 
 
-				<TodoForm addTask={addTask} updating={updating}/>
+				<TodoForm addTask={addTask} updating={updating} deleteCompletedsTasks={deleteCompletedsTasks}/>
 			</div>
 
 		</div>

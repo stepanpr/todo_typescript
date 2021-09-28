@@ -5,6 +5,7 @@ import classnames from 'classnames';
 interface TodoFormProps {
 	addTask(title: string): void;
 	updating: any;
+	deleteCompletedsTasks(): void;
 }
 
 // export const FormTodo: React.FunctionComponent<{addTodo(title: string): void}> = (props) => {
@@ -31,7 +32,7 @@ interface TodoFormProps {
 		setTitle('');
 	}
 
-	const buttonValue = props.updating.yes ? 'Edit value' : 'Add New';
+	const buttonValue = props.updating.yes ? 'Применить изменения' : 'Добавить задачу';
 
 	const inputClassNames = classnames({
 		'todoForm_input': true,
@@ -44,13 +45,17 @@ interface TodoFormProps {
 	});
 
 	return (
-		<ul className="todoForm">
+		<div className="todoForm">
 			{/* <label htmlFor="title">Новая зачача: </label> */}
 			<div className="todoForm_sendBox">
 				<input className={inputClassNames} onChange={hadleChange} onKeyPress={handleEnter} type="text" id="title" autoFocus={true} value={title} placeholder="Введите новую задачу" ref={input => input && input.focus()}/>
 				<button className={buttonClassNames} onClick={handleClick}>{buttonValue}</button>
 			</div>
-		</ul>
+			<div className="todoForm_actionBox">
+				<button className='todoForm_buttonDeleteAll' onClick={props.deleteCompletedsTasks}>Удалить завершенные</button>
+			</div>
+
+		</div>
 	);
 }
 
