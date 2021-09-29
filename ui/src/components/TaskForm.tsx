@@ -35,25 +35,11 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = (props) => {
 			props.addTask(title);
 			setTitle('');
 		}
-		// if(event.key === 'Escape')
-		// 	alert(3);
-			// console.log(title);
-			// addNew();
 	}
-
-
-	// onKeyDown={handleEscPress} 
-	// const handleEscPress = function(e: any) {
-	// 	  if (e.keyCode === 27) {
-	// 		props.setUpdating({yes: false, value: ''});
-	// 	  }
-	// 	}
-	  
 
 	const handleClick = () => {
 		props.addTask(title);
 		setTitle('');
-		alert(props.sumOfCompleteds)
 	}
 
 	const buttonValue = props.updating.yes ? 'Применить изменения' : 'Добавить задачу';

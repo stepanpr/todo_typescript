@@ -3,29 +3,6 @@ import { ITask } from "../interfaces/ITask";
 import classnames from 'classnames';
 
 
-// // interface TodoListProps{
-
-// // 	todos: any[];
-// // }
-
-// export const TodoList: React.FunctionComponent = (props: any) => {
-
-// 	// props.todos 
-
-// 	return (
-// 		<div className="todoList">
-//       {props.todos.map((task) => {
-//         return (
-//           <li key={task.id} className='list'>
-//             <span className='repo-text'>{task.title} </span>
-//             {/* <span className='repo-description'>{repo.description}</span> */}
-//           </li>
-//         );
-//       })}
-
-// 		</div>
-// 	);
-// }
 
 interface TaskListProps{
 
@@ -45,18 +22,11 @@ export const TaskList: React.FunctionComponent<TaskListProps> = (props) => {
 		props.deleteTask(id);
 	}
 
-	// let idOfUpdating: string;
 	const handleEdit = (task: ITask) => {
 		if (props.updating.yes && task.id !== props.selectedElement.id)
 			return ;
 		props.updateTask(task);
-		// idOfUpdating = task.id;
-		// alert(task.id);
-		// return task.id;
 	}
-
-
-
 
 	return (
 		<ul className="taskList">
