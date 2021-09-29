@@ -59,8 +59,8 @@ export const TaskList: React.FunctionComponent<TaskListProps> = (props) => {
 				<li className={classnames(completedClassNames)} key={task.id}>
 					<input className='taskList__item-checkbox' type="checkbox" onChange={() => props.checkAsComplete(task)} checked={task.completed}/>
 					<span className={titleClassNames}>{task.title}</span>
-					<span className='taskList__item-datetime'>(time: {task.datetime}, </span>
-					<span className='taskList__item-id'>id: {task.id})</span>
+					<span className='taskList__item-datetime'>дата: {task.datetime}, </span>
+					<span className='taskList__item-id'>id: {task.id}</span>
 					{/* <span className='taskList__item-id'>com:{task.completed}</span> */}
 
 					<span className={classnames(deleteButtonClassNames)} onClick={() => handleDelete(task.id)}>удал.</span>

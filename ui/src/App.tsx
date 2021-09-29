@@ -23,10 +23,22 @@ enum ActionTypes {
 
 function reducerTasks(state: ITask[], action: any ) {
 
+	const getNewDate = (ts: string) => {
+
+		let nd = new Date(+ts);
+		let date = nd.getDate();
+		let month = nd.getMonth();
+		let year = nd.getFullYear();
+		let hours = nd.getHours();
+		let minutes = nd.getMinutes();
+		let seconds = nd.getSeconds();
+		return hours + ':' + minutes + ':' + seconds + ' ' + date + '/' + month + '/' + year + ' ';
+	}
+
 	switch (action.type) {
 		case ActionTypes.copyTasks: {
 			const tasks  = action.tasks;
-			const newTasks = tasks.map((a : ITask) => ({...a}));
+			const newTasks = tasks.map((a : ITask) => ({id: a.id, title: a.title, completed: a.completed, datetime: getNewDate(a.datetime) }));
 			return newTasks;
 		}
 		case ActionTypes.deleteCompleteds: {
