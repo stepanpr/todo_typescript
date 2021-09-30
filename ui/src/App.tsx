@@ -89,11 +89,11 @@ const App: React.FunctionComponent = () => {
     }
 
 	/* отправка tasks */
-	const postTask = (title: string) => {
+	const postTask = async (title: string) => {
 
 		if (title === '')
 			return ;
-		axios({
+		await axios({
 			method: 'post',
 			url: postURL,
 			data: {
@@ -107,8 +107,8 @@ const App: React.FunctionComponent = () => {
     }
 
 	/* удаление tasks */
-	const deleteTask = (id: string) => {
-		axios({
+	const deleteTask = async (id: string) => {
+		await axios({
 			method: 'delete',
 			url: deleteURL,
 			data: {
@@ -129,12 +129,12 @@ const App: React.FunctionComponent = () => {
 	}
 	
 	/* добвление новых и отредактированных tasks */
-	const addTask = (title: string) => {
+	const addTask = async (title: string) => {
 
 		if (title === "")
 			return ;
 		if (updating.yes === true) {
-			axios({
+			await axios({
 				method: 'post',
 				url: updateURL,
 				data: {
@@ -162,9 +162,9 @@ const App: React.FunctionComponent = () => {
 			setSelectedElement(initSelectedElement);
 			getTasks();
 
-		} else if (task.id === selectedElement.id && updating.yes === true) {
-			getTasks();
-			return ;
+		// } else if (task.id === selectedElement.id && updating.yes === true) {
+		// 	getTasks();
+		// 	return ;
 		} else {
 			getTasks();
 			setUpdating( {yes: true, value: ''});
@@ -173,10 +173,10 @@ const App: React.FunctionComponent = () => {
 	}
 
 	/* определить задачу как выполненную */
-	const checkAsComplete = (task: ITask) => {
+	const checkAsComplete = async (task: ITask) => {
 
 		if (!updating.yes) {
-		axios({
+		await axios({
 			method: 'post',
 			url: updateURL,
 			data: {
