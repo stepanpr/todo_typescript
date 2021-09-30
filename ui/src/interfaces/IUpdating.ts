@@ -1,5 +1,5 @@
 
 export interface IUpdating {
-	yes: boolean;
-	value: string;
+	isChange: boolean;
+	// value: string;
 }

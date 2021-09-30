@@ -12,7 +12,6 @@ import { Header } from './components/Header'
 
 function initialTasks() {
 	return([
-		// { id: '000', title: 'empty', completed: false, datetime: null},
 	]);
 }
 
@@ -61,7 +60,7 @@ const App: React.FunctionComponent = () => {
 
 	let tasksList: ITask[] = [];
 	const [tasks, dispatchTasks] = useReducer(reducerTasks, tasksList, initialTasks);
-	const [updating, setUpdating] = useState<IUpdating>({ yes: false, value: '', })
+	const [updating, setUpdating] = useState<IUpdating>({ isChange: false })
 	const initSelectedElement = {id: 'null', title: 'null', completed: false, datetime: 'null' };
 	const [selectedElement, setSelectedElement] = useState<ITask>(initSelectedElement);
 
@@ -80,12 +79,10 @@ const App: React.FunctionComponent = () => {
 
 	/* загрузка tasks из БД в стейт*/
 	const getTasks = async () => {
+
 		const {data} = await axios.get(getURL);
 		console.log(data);
 		dispatchTasks({type: 'copyTasks', tasks: data.items});
-		// await fetch(getURL)
-		// .then(result => result.json())
-		// .then((data) => dispatchTasks({type: 'copyTasks', tasks: data.items}));
     }
 
 	/* отправка tasks */
@@ -116,7 +113,6 @@ const App: React.FunctionComponent = () => {
 			}
 		  });
 		getTasks();
-
 	}
 
 	/* удаление завершенных tasks */
@@ -133,7 +129,7 @@ const App: React.FunctionComponent = () => {
 
 		if (title === "")
 			return ;
-		if (updating.yes === true) {
+		if (updating.isChange === true) {
 			await axios({
 				method: 'post',
 				url: updateURL,
@@ -144,7 +140,7 @@ const App: React.FunctionComponent = () => {
 					datetime: selectedElement.datetime
 				}
 			});
-			setUpdating( {yes: false, value: ''});
+			setUpdating( {isChange: false });
 			setSelectedElement(initSelectedElement);
 			getTasks();
 
@@ -157,17 +153,13 @@ const App: React.FunctionComponent = () => {
 	/* редактирование */
 	const updateTask = (task: ITask) => {
 
-		if (task.id === selectedElement.id && updating.yes === true) {
-			setUpdating({yes: false, value: ''});
+		if (task.id === selectedElement.id && updating.isChange === true) {
+			setUpdating({isChange: false});
 			setSelectedElement(initSelectedElement);
 			getTasks();
-
-		// } else if (task.id === selectedElement.id && updating.yes === true) {
-		// 	getTasks();
-		// 	return ;
 		} else {
 			getTasks();
-			setUpdating( {yes: true, value: ''});
+			setUpdating( {isChange: true});
 			setSelectedElement(task);
 		}
 	}
@@ -175,7 +167,7 @@ const App: React.FunctionComponent = () => {
 	/* определить задачу как выполненную */
 	const checkAsComplete = async (task: ITask) => {
 
-		if (!updating.yes) {
+		if (!updating.isChange) {
 		await axios({
 			method: 'post',
 			url: updateURL,

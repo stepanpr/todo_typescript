@@ -18,7 +18,7 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = (props) => {
 	useEffect(() => {
 		const handleEscPress = (event: any) => {
 			if (event.keyCode === 27)
-				props.setUpdating({yes: false, value: ''});
+				props.setUpdating({ isChange: false });
 		}
 		window.addEventListener("keydown", handleEscPress);
 		return () => {
@@ -42,21 +42,21 @@ export const TaskForm: React.FunctionComponent<TaskFormProps> = (props) => {
 		setTitle('');
 	}
 
-	const buttonValue = props.updating.yes ? 'Применить изменения' : 'Добавить задачу';
+	const buttonValue = props.updating.isChange ? 'Применить изменения' : 'Добавить задачу';
 
 	const inputClassNames = classnames({
 		'todoForm_input': true,
-		'input-updating': props.updating.yes,
+		'input-updating': props.updating.isChange,
 	});
 	
 	const buttonClassNames = classnames({
 		'todoForm_buttonAdd': true,
-		'buttonAdd-updating': props.updating.yes,
+		'buttonAdd-updating': props.updating.isChange,
 	});
 
 	const labelClassNames = classnames({
 		'todoForm_input-label': true,
-		'todoForm_input-label-none': !props.updating.yes,
+		'todoForm_input-label-none': !props.updating.isChange,
 	});
 
 	const deleteAllButtonClassNames = classnames({

@@ -17,13 +17,13 @@ interface TaskListProps{
 export const TaskList: React.FunctionComponent<TaskListProps> = (props) => {
 
 	const handleDelete = (id: string) => {
-		if (props.updating.yes)
+		if (props.updating.isChange)
 			return ;
 		props.deleteTask(id);
 	}
 
 	const handleEdit = (task: ITask) => {
-		if (props.updating.yes && task.id !== props.selectedElement.id)
+		if (props.updating.isChange && task.id !== props.selectedElement.id)
 			return ;
 		props.updateTask(task);
 	}
@@ -33,7 +33,7 @@ export const TaskList: React.FunctionComponent<TaskListProps> = (props) => {
 			
       {Array.isArray(props.tasks) && props.tasks.map((task) => {
 
-			const editButtonValue = props.updating.yes && props.selectedElement.id === task.id ? 'отмена' : 'ред.' 
+			const editButtonValue = props.updating.isChange && props.selectedElement.id === task.id ? 'отмена' : 'ред.' 
 		  	const completedClassNames = classnames({
 				'taskList__item': true,
 				'item-completed': task.completed === true,
@@ -41,17 +41,17 @@ export const TaskList: React.FunctionComponent<TaskListProps> = (props) => {
 			});
 			const titleClassNames = classnames({
 				'taskList__item-title': true,
-				'item-title-updating': props.updating.yes,
-				'item-titte-selected': props.updating.yes && (props.selectedElement.id === task.id )
+				'item-title-updating': props.updating.isChange,
+				'item-titte-selected': props.updating.isChange && (props.selectedElement.id === task.id )
 			});
 			const editButtonClassNames = classnames({
 				'editButton': !task.completed,
 				'editButton-none': task.completed,
-				'editButton-updating': props.updating.yes && (props.selectedElement.id !== task.id )
+				'editButton-updating': props.updating.isChange && (props.selectedElement.id !== task.id )
 			});
 			const deleteButtonClassNames = classnames({
 				'deleteButton': true,
-				'deleteButton-updating': props.updating.yes
+				'deleteButton-updating': props.updating.isChange
 			});
 			console.log('dd', task.completed)
 			console.log('sd', props.selectedElement.id);
